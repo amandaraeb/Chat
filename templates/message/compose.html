@@ -1,0 +1,33 @@
+<form method="post">
+    {{ form.as_p }}
+    <input type="submit" class="submit_btn btn label-success" value="Send"/>
+    {%csrf_token %}
+    <input type="hidden" id="csrf_token" value='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+</form>
+
+<h1> Received Messages </h1>
+<div id='received_messages'>here</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+function fetchdata(){
+$.ajax({
+  url: '/received/',
+  success:function(data){
+    messages = '';
+    $(data.messages).each(function ( index, value ) {
+      messages += '<li>' + value.message + '</li>'
+    });
+    $("#received_messages").html(messages);
+  }
+});
+}
+$(document).ready(function(){
+    setInterval(fetchdata,5000);
+});
+
+fetchdata();
+</script>
+
+
+
